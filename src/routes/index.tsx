@@ -233,12 +233,16 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.far_number || !form.cipeiro || !form.encarregado || !form.setor) {
+    if (!form.cipeiro || !form.encarregado || !form.setor) {
       toast.error("Preencha os campos obrigatórios");
       return;
     }
     setSubmitting(true);
     try {
+      const { data: farData, error: farError } = await supabase.rpc("get_next_far_number");
+      if (farError || !farData) throw new Error("Erro ao gerar número FAR");
+      const far_number = farData as string;
+
       let before_image_url: string | null = null;
       let after_image_url: string | null = null;
       if (beforeFile) before_image_url = await uploadImage(beforeFile);
@@ -246,6 +250,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 
       const { error } = await supabase.from("far_records").insert({
         ...form,
+        far_number,
         supervisor: form.supervisor || null,
         before_image_url,
         after_image_url,
