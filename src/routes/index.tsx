@@ -509,15 +509,31 @@ function FileField({
 
 function DetailDialog({
   record,
+  isAdmin,
   onClose,
-  onDeleted,
+  onChanged,
 }: {
   record: FarRecord;
+  isAdmin: boolean;
   onClose: () => void;
-  onDeleted: () => void;
+  onChanged: () => void;
 }) {
+  void onClose;
   const ref = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    record_date: record.record_date,
+    cipeiro: record.cipeiro,
+    encarregado: record.encarregado,
+    supervisor: record.supervisor ?? "",
+    setor: record.setor,
+    risk_condition: record.risk_condition,
+    corrective_action: record.corrective_action,
+    responsible: record.responsible,
+    status: record.status,
+  });
 
   async function exportPdf() {
     if (!ref.current) return;
@@ -541,19 +557,39 @@ function DetailDialog({
   async function handleDelete() {
     if (!confirm("Excluir este registro?")) return;
     const { error } = await supabase.from("far_records").delete().eq("id", record.id);
-    if (error) return toast.error("Erro ao excluir");
+    if (error) return toast.error("Erro ao excluir (apenas admin)");
     toast.success("Registro excluído");
-    onDeleted();
+    onChanged();
+  }
+
+  async function handleSaveEdit() {
+    setSaving(true);
+    const { error } = await supabase
+      .from("far_records")
+      .update({ ...form, supervisor: form.supervisor || null })
+      .eq("id", record.id);
+    setSaving(false);
+    if (error) return toast.error("Erro ao salvar (apenas admin)");
+    toast.success("Registro atualizado");
+    setEditing(false);
+    onChanged();
   }
 
   return (
     <DialogContent className="max-h-[95vh] max-w-4xl overflow-y-auto p-0">
       <div className="flex items-center justify-between border-b p-4">
         <DialogTitle>Registro {record.far_number}</DialogTitle>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={handleDelete}>
-            <Trash2 className="mr-2 h-4 w-4" /> Excluir
-          </Button>
+        <div className="flex flex-wrap gap-2">
+          {isAdmin && !editing && (
+            <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
+              <Pencil className="mr-2 h-4 w-4" /> Editar
+            </Button>
+          )}
+          {isAdmin && (
+            <Button variant="outline" size="sm" onClick={handleDelete}>
+              <Trash2 className="mr-2 h-4 w-4" /> Excluir
+            </Button>
+          )}
           <Button size="sm" onClick={exportPdf} disabled={exporting}>
             {exporting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -564,9 +600,72 @@ function DetailDialog({
           </Button>
         </div>
       </div>
-      <div className="p-4">
-        <FarSheet ref={ref} record={record} />
-      </div>
+      {editing ? (
+        <div className="space-y-4 p-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            <Field label="Data">
+              <Input type="date" value={form.record_date} onChange={(e) => setForm({ ...form, record_date: e.target.value })} />
+            </Field>
+            <Field label="Status">
+              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {STATUS_OPTIONS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Setor">
+              <Select value={form.setor} onValueChange={(v) => setForm({ ...form, setor: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {SETOR_OPTIONS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Cipeiro">
+              <Input value={form.cipeiro} onChange={(e) => setForm({ ...form, cipeiro: e.target.value })} />
+            </Field>
+            <Field label="Responsável">
+              <Input value={form.responsible} onChange={(e) => setForm({ ...form, responsible: e.target.value })} />
+            </Field>
+            <Field label="Encarregado">
+              <Select value={form.encarregado} onValueChange={(v) => setForm({ ...form, encarregado: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {ENCARREGADO_OPTIONS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Supervisor">
+              <Select value={form.supervisor} onValueChange={(v) => setForm({ ...form, supervisor: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {ENCARREGADO_OPTIONS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </Field>
+          </div>
+          <Field label="Condição de risco">
+            <Textarea rows={3} value={form.risk_condition} onChange={(e) => setForm({ ...form, risk_condition: e.target.value })} />
+          </Field>
+          <Field label="Ação corretiva">
+            <Textarea rows={3} value={form.corrective_action} onChange={(e) => setForm({ ...form, corrective_action: e.target.value })} />
+          </Field>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setEditing(false)}>Cancelar</Button>
+            <Button onClick={handleSaveEdit} disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Salvar alterações
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="p-4">
+          <FarSheet ref={ref} record={record} />
+        </div>
+      )}
     </DialogContent>
   );
 }
