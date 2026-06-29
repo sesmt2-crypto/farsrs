@@ -63,6 +63,12 @@ const SETOR_OPTIONS = [
   "EXPEDIÇÃO PÁTIO NOVO",
   "MOVIMENTAÇÃO",
 ];
+const ENCARREGADO_OPTIONS = [
+  "ELISEU BOUARD",
+  "SILVÉRIO",
+  "PAULO",
+  "LUIZ",
+];
 
 function HomePage() {
   const [records, setRecords] = useState<FarRecord[]>([]);
@@ -312,10 +318,18 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
             </Select>
           </Field>
           <Field label="Encarregado *">
-            <Input
-              value={form.encarregado}
-              onChange={(e) => set("encarregado", e.target.value)}
-            />
+            <Select value={form.encarregado} onValueChange={(v) => set("encarregado", v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o encarregado" />
+               </SelectTrigger>
+              <SelectContent>
+                {ENCARREGADO_OPTIONS.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
           <Field label="Supervisor">
             <Input
