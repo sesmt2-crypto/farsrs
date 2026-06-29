@@ -273,11 +273,11 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 md:grid-cols-3">
-          <Field label="Nº FAR *">
+          <Field label="Nº FAR">
             <Input
-              value={form.far_number}
-              onChange={(e) => set("far_number", e.target.value)}
-              placeholder="FR-SSO-09"
+              value="Gerado automaticamente ao salvar"
+              readOnly
+              className="bg-muted/50 text-muted-foreground"
             />
           </Field>
           <Field label="Data *">
