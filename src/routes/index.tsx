@@ -205,7 +205,6 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
   const [beforeFile, setBeforeFile] = useState<File | null>(null);
   const [afterFile, setAfterFile] = useState<File | null>(null);
   const [form, setForm] = useState({
-    far_number: "",
     record_date: new Date().toISOString().slice(0, 10),
     cipeiro: "",
     encarregado: "",
@@ -234,12 +233,16 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.far_number || !form.cipeiro || !form.encarregado || !form.setor) {
+    if (!form.cipeiro || !form.encarregado || !form.setor) {
       toast.error("Preencha os campos obrigatórios");
       return;
     }
     setSubmitting(true);
     try {
+      const { data: farData, error: farError } = await supabase.rpc("get_next_far_number");
+      if (farError || !farData) throw new Error("Erro ao gerar número FAR");
+      const far_number = farData as string;
+
       let before_image_url: string | null = null;
       let after_image_url: string | null = null;
       if (beforeFile) before_image_url = await uploadImage(beforeFile);
@@ -247,6 +250,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 
       const { error } = await supabase.from("far_records").insert({
         ...form,
+        far_number,
         supervisor: form.supervisor || null,
         before_image_url,
         after_image_url,
@@ -269,11 +273,11 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 md:grid-cols-3">
-          <Field label="Nº FAR *">
+          <Field label="Nº FAR">
             <Input
-              value={form.far_number}
-              onChange={(e) => set("far_number", e.target.value)}
-              placeholder="FR-SSO-09"
+              value="Gerado automaticamente ao salvar"
+              readOnly
+              className="bg-muted/50 text-muted-foreground"
             />
           </Field>
           <Field label="Data *">
