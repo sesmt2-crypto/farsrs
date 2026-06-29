@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      far_records: {
+        Row: {
+          after_image_url: string | null
+          before_image_url: string | null
+          cipeiro: string
+          corrective_action: string
+          created_at: string
+          encarregado: string
+          far_number: string
+          id: string
+          record_date: string
+          responsible: string
+          risk_condition: string
+          setor: string
+          status: string
+          supervisor: string | null
+        }
+        Insert: {
+          after_image_url?: string | null
+          before_image_url?: string | null
+          cipeiro: string
+          corrective_action: string
+          created_at?: string
+          encarregado: string
+          far_number: string
+          id?: string
+          record_date?: string
+          responsible: string
+          risk_condition: string
+          setor: string
+          status?: string
+          supervisor?: string | null
+        }
+        Update: {
+          after_image_url?: string | null
+          before_image_url?: string | null
+          cipeiro?: string
+          corrective_action?: string
+          created_at?: string
+          encarregado?: string
+          far_number?: string
+          id?: string
+          record_date?: string
+          responsible?: string
+          risk_condition?: string
+          setor?: string
+          status?: string
+          supervisor?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
