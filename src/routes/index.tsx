@@ -56,7 +56,13 @@ type FarRecord = {
 };
 
 const STATUS_OPTIONS = ["CONCLUÍDO", "EM ANDAMENTO", "PENDENTE"];
-const SETOR_OPTIONS = ["PRÉ-MONTAGEM", "EXPEDIÇÃO EMBARQUE", "MONTAGEM I"];
+const SETOR_OPTIONS = [
+  "PRÉ-MONTAGEM",
+  "EXPEDIÇÃO EMBARQUE",
+  "MONTAGEM I",
+  "EXPEDIÇÃO PÁTIO NOVO",
+  "MOVIMENTAÇÃO",
+];
 
 function HomePage() {
   const [records, setRecords] = useState<FarRecord[]>([]);
