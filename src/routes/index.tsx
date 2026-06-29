@@ -392,7 +392,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <Label className="text-sm font-bold uppercase tracking-wide text-foreground">
         {label}
       </Label>
       {children}
@@ -414,7 +414,7 @@ function FileField({
   const cameraRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <Label className="text-sm font-bold uppercase tracking-wide text-foreground">
         {label}
       </Label>
       <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md border-2 border-dashed bg-muted/40">
