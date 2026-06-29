@@ -548,7 +548,7 @@ const FarSheet = ({
     <div
       ref={ref}
       className="mx-auto border border-zinc-800 bg-white text-zinc-900"
-      style={{ width: 800, fontFamily: "Arial, sans-serif", fontSize: 11 }}
+      style={{ width: 800, fontFamily: "Arial, sans-serif", fontSize: 13 }}
     >
       {/* Header */}
       <div className="grid grid-cols-[120px_1fr_180px] border-b border-zinc-800">
