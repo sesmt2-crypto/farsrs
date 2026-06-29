@@ -77,6 +77,8 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [openNew, setOpenNew] = useState(false);
   const [selected, setSelected] = useState<FarRecord | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -89,9 +91,34 @@ function HomePage() {
     setLoading(false);
   }
 
+  async function checkAdmin(uid: string | undefined) {
+    if (!uid) return setIsAdmin(false);
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", uid)
+      .eq("role", "admin")
+      .maybeSingle();
+    setIsAdmin(!!data);
+  }
+
   useEffect(() => {
     load();
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      checkAdmin(data.session?.user.id);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      setSession(s);
+      checkAdmin(s?.user.id);
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    toast.success("Sessão encerrada");
+  }
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -102,21 +129,33 @@ function HomePage() {
             <h1 className="text-2xl font-bold tracking-tight">Sistema de Gestão Integrado — SGI</h1>
             <p className="text-base text-muted-foreground">
               FAR — Formulário de Apontamentos de Riscos
+              {isAdmin && <span className="ml-2 rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">ADMIN</span>}
             </p>
           </div>
-          <Dialog open={openNew} onOpenChange={setOpenNew}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" /> Novo registro
+          <div className="flex items-center gap-2">
+            {session ? (
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" /> Sair
               </Button>
-            </DialogTrigger>
-            <NewRecordDialog
-              onCreated={() => {
-                setOpenNew(false);
-                load();
-              }}
-            />
-          </Dialog>
+            ) : (
+              <Button asChild variant="outline" size="sm">
+                <Link to="/auth"><LogIn className="mr-2 h-4 w-4" /> Admin</Link>
+              </Button>
+            )}
+            <Dialog open={openNew} onOpenChange={setOpenNew}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Novo registro
+                </Button>
+              </DialogTrigger>
+              <NewRecordDialog
+                onCreated={() => {
+                  setOpenNew(false);
+                  load();
+                }}
+              />
+            </Dialog>
+          </div>
         </div>
       </header>
 
@@ -163,8 +202,9 @@ function HomePage() {
         {selected && (
           <DetailDialog
             record={selected}
+            isAdmin={isAdmin}
             onClose={() => setSelected(null)}
-            onDeleted={() => {
+            onChanged={() => {
               setSelected(null);
               load();
             }}
