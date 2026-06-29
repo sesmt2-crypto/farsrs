@@ -98,8 +98,8 @@ function HomePage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Sistema de Gestão Integrado — SGI</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-2xl font-bold tracking-tight">Sistema de Gestão Integrado — SGI</h1>
+            <p className="text-base text-muted-foreground">
               FAR — Formulário de Apontamentos de Riscos
             </p>
           </div>
