@@ -553,10 +553,7 @@ const FarSheet = ({
       {/* Header */}
       <div className="grid grid-cols-[120px_1fr_180px] border-b border-zinc-800">
         <div className="flex items-center justify-center border-r border-zinc-800 p-3">
-          <div className="text-center">
-            <div className="text-2xl font-black tracking-tight text-blue-900">SGI</div>
-            <div className="text-[9px] font-semibold">SISTEMA</div>
-          </div>
+          <img src={srsLogo.url} alt="SRS - Prestadora de Serviços" className="max-h-16 w-auto object-contain" crossOrigin="anonymous" />
         </div>
         <div className="flex flex-col items-center justify-center p-3 text-center font-bold">
           <div>SISTEMA DE GESTÃO INTEGRADO - SGI</div>
