@@ -63,6 +63,12 @@ const SETOR_OPTIONS = [
   "EXPEDIÇÃO PÁTIO NOVO",
   "MOVIMENTAÇÃO",
 ];
+const ENCARREGADO_OPTIONS = [
+  "ELISEU BOUARD",
+  "SILVÉRIO",
+  "PAULO",
+  "LUIZ",
+];
 
 function HomePage() {
   const [records, setRecords] = useState<FarRecord[]>([]);
