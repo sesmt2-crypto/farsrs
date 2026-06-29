@@ -269,7 +269,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
   return (
     <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
       <DialogHeader>
-        <DialogTitle>Novo registro FAR</DialogTitle>
+        <DialogTitle>REGISTRO DE FARR-SRS</DialogTitle>
       </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 md:grid-cols-3">
