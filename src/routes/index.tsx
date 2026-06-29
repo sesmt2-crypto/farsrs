@@ -392,7 +392,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-sm font-bold uppercase tracking-wide text-foreground">
+      <Label className="text-base font-bold uppercase tracking-wide text-foreground">
         {label}
       </Label>
       {children}
