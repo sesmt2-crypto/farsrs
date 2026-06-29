@@ -56,6 +56,7 @@ type FarRecord = {
 };
 
 const STATUS_OPTIONS = ["CONCLUÍDO", "EM ANDAMENTO", "PENDENTE"];
+const SETOR_OPTIONS = ["PRÉ-MONTAGEM", "EXPEDIÇÃO EMBARQUE", "MONTAGEM I"];
 
 function HomePage() {
   const [records, setRecords] = useState<FarRecord[]>([]);
@@ -291,7 +292,18 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
             <Input value={form.cipeiro} onChange={(e) => set("cipeiro", e.target.value)} />
           </Field>
           <Field label="Setor *">
-            <Input value={form.setor} onChange={(e) => set("setor", e.target.value)} />
+            <Select value={form.setor} onValueChange={(v) => set("setor", v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o setor" />
+              </SelectTrigger>
+              <SelectContent>
+                {SETOR_OPTIONS.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
           <Field label="Encarregado *">
             <Input
