@@ -205,7 +205,6 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
   const [beforeFile, setBeforeFile] = useState<File | null>(null);
   const [afterFile, setAfterFile] = useState<File | null>(null);
   const [form, setForm] = useState({
-    far_number: "",
     record_date: new Date().toISOString().slice(0, 10),
     cipeiro: "",
     encarregado: "",
