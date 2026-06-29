@@ -430,7 +430,7 @@ function FileField({
               <button
                 type="button"
                 onClick={() => galleryRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-sm font-medium hover:bg-accent"
               >
                 <Images className="h-4 w-4" />
                 Galeria
@@ -438,7 +438,7 @@ function FileField({
               <button
                 type="button"
                 onClick={() => cameraRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-sm font-medium hover:bg-accent"
               >
                 <Camera className="h-4 w-4" />
                 Câmera
