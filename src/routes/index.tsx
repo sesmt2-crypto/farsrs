@@ -332,10 +332,18 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
             </Select>
           </Field>
           <Field label="Supervisor">
-            <Input
-              value={form.supervisor}
-              onChange={(e) => set("supervisor", e.target.value)}
-            />
+            <Select value={form.supervisor} onValueChange={(v) => set("supervisor", v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o supervisor" />
+              </SelectTrigger>
+              <SelectContent>
+                {ENCARREGADO_OPTIONS.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
         </div>
 
