@@ -405,29 +405,58 @@ function FileField({
   onChange: (f: File | null) => void;
 }) {
   const preview = file ? URL.createObjectURL(file) : null;
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-1.5">
       <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </Label>
-      <label className="block cursor-pointer">
-        <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md border-2 border-dashed bg-muted/40 hover:bg-muted">
-          {preview ? (
-            <img src={preview} alt={label} className="h-full w-full object-cover" />
-          ) : (
+      <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md border-2 border-dashed bg-muted/40">
+        {preview ? (
+          <img src={preview} alt={label} className="h-full w-full object-cover" />
+        ) : (
+          <div className="flex w-full flex-col items-center justify-center gap-3 px-4">
             <div className="text-center text-sm text-muted-foreground">
               <ImageIcon className="mx-auto mb-1 h-6 w-6" />
               Clique para anexar
             </div>
-          )}
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => onChange(e.target.files?.[0] ?? null)}
-        />
-      </label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => galleryRef.current?.click()}
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+              >
+                <Images className="h-4 w-4" />
+                Galeria
+              </button>
+              <button
+                type="button"
+                onClick={() => cameraRef.current?.click()}
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+              >
+                <Camera className="h-4 w-4" />
+                Câmera
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
+      <input
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
     </div>
   );
 }
