@@ -98,8 +98,8 @@ function HomePage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
           <div>
-            <h1 className="text-xl font-bold tracking-tight">Sistema de Gestão Integrado — SGI</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-2xl font-bold tracking-tight">Sistema de Gestão Integrado — SGI</h1>
+            <p className="text-base text-muted-foreground">
               FAR — Formulário de Apontamentos de Riscos
             </p>
           </div>
@@ -142,13 +142,13 @@ function HomePage() {
                 </div>
                 <div className="space-y-2 p-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-muted-foreground">
+                    <span className="font-mono text-sm text-muted-foreground">
                       {r.far_number}
                     </span>
                     <StatusBadge status={r.status} />
                   </div>
-                  <p className="line-clamp-2 text-sm font-medium">{r.risk_condition}</p>
-                  <div className="text-xs text-muted-foreground">
+                  <p className="line-clamp-2 text-base font-medium">{r.risk_condition}</p>
+                  <div className="text-sm text-muted-foreground">
                     {r.setor} · {new Date(r.record_date).toLocaleDateString("pt-BR")}
                   </div>
                 </div>
@@ -194,7 +194,7 @@ function ImgThumb({ url, label }: { url: string | null; label: string }) {
           <ImageIcon className="h-8 w-8" />
         </div>
       )}
-      <span className="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white">
+      <span className="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 text-xs font-semibold tracking-wide text-white">
         {label}
       </span>
     </div>
@@ -392,7 +392,7 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-sm font-bold uppercase tracking-wide text-foreground">
+      <Label className="text-base font-bold uppercase tracking-wide text-foreground">
         {label}
       </Label>
       {children}
@@ -430,7 +430,7 @@ function FileField({
               <button
                 type="button"
                 onClick={() => galleryRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-sm font-medium hover:bg-accent"
               >
                 <Images className="h-4 w-4" />
                 Galeria
@@ -438,7 +438,7 @@ function FileField({
               <button
                 type="button"
                 onClick={() => cameraRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-sm font-medium hover:bg-accent"
               >
                 <Camera className="h-4 w-4" />
                 Câmera
