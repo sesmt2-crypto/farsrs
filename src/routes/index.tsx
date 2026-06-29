@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { Plus, FileDown, Image as ImageIcon, Loader2, Trash2, Camera, Images } from "lucide-react";
+import { Plus, FileDown, Image as ImageIcon, Loader2, Trash2, Camera, Images, LogIn, LogOut, Pencil } from "lucide-react";
 import jsPDF from "jspdf";
 import srsLogo from "@/assets/srs-logo.png.asset.json";
 import html2canvas from "html2canvas-pro";
