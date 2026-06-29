@@ -142,13 +142,13 @@ function HomePage() {
                 </div>
                 <div className="space-y-2 p-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-muted-foreground">
+                    <span className="font-mono text-sm text-muted-foreground">
                       {r.far_number}
                     </span>
                     <StatusBadge status={r.status} />
                   </div>
-                  <p className="line-clamp-2 text-sm font-medium">{r.risk_condition}</p>
-                  <div className="text-xs text-muted-foreground">
+                  <p className="line-clamp-2 text-base font-medium">{r.risk_condition}</p>
+                  <div className="text-sm text-muted-foreground">
                     {r.setor} · {new Date(r.record_date).toLocaleDateString("pt-BR")}
                   </div>
                 </div>
