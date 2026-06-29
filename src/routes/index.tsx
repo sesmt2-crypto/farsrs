@@ -194,7 +194,7 @@ function ImgThumb({ url, label }: { url: string | null; label: string }) {
           <ImageIcon className="h-8 w-8" />
         </div>
       )}
-      <span className="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white">
+      <span className="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 text-xs font-semibold tracking-wide text-white">
         {label}
       </span>
     </div>
