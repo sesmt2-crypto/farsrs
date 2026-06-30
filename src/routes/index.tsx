@@ -399,8 +399,8 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
         </Field>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <FileField label="Foto ANTES" file={beforeFile} onChange={setBeforeFile} />
-          <FileField label="Foto DEPOIS" file={afterFile} onChange={setAfterFile} />
+          <FileField label="Foto ANTES *" file={beforeFile} onChange={setBeforeFile} />
+          <FileField label="Foto DEPOIS *" file={afterFile} onChange={setAfterFile} />
         </div>
 
         <DialogFooter>
