@@ -446,30 +446,38 @@ function FileField({
         {preview ? (
           <img src={preview} alt={label} className="h-full w-full object-cover" />
         ) : (
-          <div className="flex w-full flex-col items-center justify-center gap-3 px-4">
-            <div className="text-center text-sm text-muted-foreground">
-              <ImageIcon className="mx-auto mb-1 h-6 w-6" />
-              Clique para anexar
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => galleryRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
-              >
-                <Images className="h-4 w-4" />
-                Galeria
-              </button>
-              <button
-                type="button"
-                onClick={() => cameraRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
-              >
-                <Camera className="h-4 w-4" />
-                Câmera
-              </button>
-            </div>
+          <div className="text-center text-sm text-muted-foreground">
+            <ImageIcon className="mx-auto mb-1 h-6 w-6" />
+            Nenhuma imagem
           </div>
+        )}
+      </div>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => galleryRef.current?.click()}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+        >
+          <Images className="h-4 w-4" />
+          Galeria
+        </button>
+        <button
+          type="button"
+          onClick={() => cameraRef.current?.click()}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+        >
+          <Camera className="h-4 w-4" />
+          Câmera
+        </button>
+        {file && (
+          <button
+            type="button"
+            onClick={() => onChange(null)}
+            className="inline-flex items-center justify-center rounded-md border bg-card px-2 py-1.5 text-xs font-medium hover:bg-accent"
+            aria-label="Remover"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
         )}
       </div>
       <input
