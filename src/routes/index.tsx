@@ -77,6 +77,20 @@ function HomePage() {
   const [openNew, setOpenNew] = useState(false);
   const [selected, setSelected] = useState<FarRecord | null>(null);
 
+  async function resolveUrl(value: string | null): Promise<string | null> {
+    if (!value) return null;
+    if (value.startsWith("http")) {
+      // legacy public URL — extract path after /far-images/
+      const idx = value.indexOf("/far-images/");
+      if (idx === -1) return value;
+      value = value.slice(idx + "/far-images/".length).split("?")[0];
+    }
+    const { data } = await supabase.storage
+      .from("far-images")
+      .createSignedUrl(value, 60 * 60 * 24 * 365);
+    return data?.signedUrl ?? null;
+  }
+
   async function load() {
     setLoading(true);
     const { data, error } = await supabase
@@ -84,9 +98,18 @@ function HomePage() {
       .select("*")
       .order("created_at", { ascending: false });
     if (error) toast.error("Erro ao carregar registros");
-    setRecords((data as FarRecord[]) ?? []);
+    const rows = (data as FarRecord[]) ?? [];
+    const resolved = await Promise.all(
+      rows.map(async (r) => ({
+        ...r,
+        before_image_url: await resolveUrl(r.before_image_url),
+        after_image_url: await resolveUrl(r.after_image_url),
+      })),
+    );
+    setRecords(resolved);
     setLoading(false);
   }
+
 
   useEffect(() => {
     load();
@@ -228,9 +251,9 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       .from("far-images")
       .upload(path, file, { contentType: file.type });
     if (error) throw error;
-    const { data } = supabase.storage.from("far-images").getPublicUrl(path);
-    return data.publicUrl;
+    return path;
   }
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -482,8 +505,28 @@ function DetailDialog({
     if (!ref.current) return;
     setExporting(true);
     try {
+      // Inline images as data URLs so the canvas isn't tainted
+      const imgs = Array.from(ref.current.querySelectorAll("img"));
+      await Promise.all(
+        imgs.map(async (el) => {
+          try {
+            const res = await fetch(el.src, { mode: "cors" });
+            const blob = await res.blob();
+            const dataUrl: string = await new Promise((resolve, reject) => {
+              const fr = new FileReader();
+              fr.onload = () => resolve(fr.result as string);
+              fr.onerror = reject;
+              fr.readAsDataURL(blob);
+            });
+            el.src = dataUrl;
+          } catch (err) {
+            console.warn("img inline failed", err);
+          }
+        }),
+      );
       const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: "#fff" });
       const img = canvas.toDataURL("image/jpeg", 0.92);
+
       const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
       const w = pdf.internal.pageSize.getWidth();
       const h = (canvas.height * w) / canvas.width;
