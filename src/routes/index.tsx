@@ -528,7 +528,12 @@ function DetailDialog({
               fr.onerror = reject;
               fr.readAsDataURL(blob);
             });
-            el.src = dataUrl;
+            el.removeAttribute("crossorigin");
+            await new Promise<void>((resolve) => {
+              el.onload = () => resolve();
+              el.onerror = () => resolve();
+              el.src = dataUrl;
+            });
           } catch (err) {
             console.warn("img inline failed", err);
           }
