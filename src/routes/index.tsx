@@ -261,16 +261,18 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       toast.error("Preencha os campos obrigatórios");
       return;
     }
+    if (!beforeFile || !afterFile) {
+      toast.error("Anexe as fotos ANTES e DEPOIS");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data: farData, error: farError } = await supabase.rpc("get_next_far_number");
       if (farError || !farData) throw new Error("Erro ao gerar número FAR");
       const far_number = farData as string;
 
-      let before_image_url: string | null = null;
-      let after_image_url: string | null = null;
-      if (beforeFile) before_image_url = await uploadImage(beforeFile);
-      if (afterFile) after_image_url = await uploadImage(afterFile);
+      const before_image_url = await uploadImage(beforeFile);
+      const after_image_url = await uploadImage(afterFile);
 
       const { error } = await supabase.from("far_records").insert({
         ...form,
@@ -397,8 +399,8 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
         </Field>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <FileField label="Foto ANTES" file={beforeFile} onChange={setBeforeFile} />
-          <FileField label="Foto DEPOIS" file={afterFile} onChange={setAfterFile} />
+          <FileField label="Foto ANTES *" file={beforeFile} onChange={setBeforeFile} />
+          <FileField label="Foto DEPOIS *" file={afterFile} onChange={setAfterFile} />
         </div>
 
         <DialogFooter>
@@ -444,30 +446,38 @@ function FileField({
         {preview ? (
           <img src={preview} alt={label} className="h-full w-full object-cover" />
         ) : (
-          <div className="flex w-full flex-col items-center justify-center gap-3 px-4">
-            <div className="text-center text-sm text-muted-foreground">
-              <ImageIcon className="mx-auto mb-1 h-6 w-6" />
-              Clique para anexar
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => galleryRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
-              >
-                <Images className="h-4 w-4" />
-                Galeria
-              </button>
-              <button
-                type="button"
-                onClick={() => cameraRef.current?.click()}
-                className="inline-flex items-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
-              >
-                <Camera className="h-4 w-4" />
-                Câmera
-              </button>
-            </div>
+          <div className="text-center text-sm text-muted-foreground">
+            <ImageIcon className="mx-auto mb-1 h-6 w-6" />
+            Nenhuma imagem
           </div>
+        )}
+      </div>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => galleryRef.current?.click()}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+        >
+          <Images className="h-4 w-4" />
+          Galeria
+        </button>
+        <button
+          type="button"
+          onClick={() => cameraRef.current?.click()}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md border bg-card px-3 py-1.5 text-xs font-medium hover:bg-accent"
+        >
+          <Camera className="h-4 w-4" />
+          Câmera
+        </button>
+        {file && (
+          <button
+            type="button"
+            onClick={() => onChange(null)}
+            className="inline-flex items-center justify-center rounded-md border bg-card px-2 py-1.5 text-xs font-medium hover:bg-accent"
+            aria-label="Remover"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
         )}
       </div>
       <input
@@ -518,7 +528,12 @@ function DetailDialog({
               fr.onerror = reject;
               fr.readAsDataURL(blob);
             });
-            el.src = dataUrl;
+            el.removeAttribute("crossorigin");
+            await new Promise<void>((resolve) => {
+              el.onload = () => resolve();
+              el.onerror = () => resolve();
+              el.src = dataUrl;
+            });
           } catch (err) {
             console.warn("img inline failed", err);
           }
