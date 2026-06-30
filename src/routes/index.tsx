@@ -261,16 +261,18 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       toast.error("Preencha os campos obrigatórios");
       return;
     }
+    if (!beforeFile || !afterFile) {
+      toast.error("Anexe as fotos ANTES e DEPOIS");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data: farData, error: farError } = await supabase.rpc("get_next_far_number");
       if (farError || !farData) throw new Error("Erro ao gerar número FAR");
       const far_number = farData as string;
 
-      let before_image_url: string | null = null;
-      let after_image_url: string | null = null;
-      if (beforeFile) before_image_url = await uploadImage(beforeFile);
-      if (afterFile) after_image_url = await uploadImage(afterFile);
+      const before_image_url = await uploadImage(beforeFile);
+      const after_image_url = await uploadImage(afterFile);
 
       const { error } = await supabase.from("far_records").insert({
         ...form,
