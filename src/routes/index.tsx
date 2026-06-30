@@ -77,6 +77,20 @@ function HomePage() {
   const [openNew, setOpenNew] = useState(false);
   const [selected, setSelected] = useState<FarRecord | null>(null);
 
+  async function resolveUrl(value: string | null): Promise<string | null> {
+    if (!value) return null;
+    if (value.startsWith("http")) {
+      // legacy public URL — extract path after /far-images/
+      const idx = value.indexOf("/far-images/");
+      if (idx === -1) return value;
+      value = value.slice(idx + "/far-images/".length).split("?")[0];
+    }
+    const { data } = await supabase.storage
+      .from("far-images")
+      .createSignedUrl(value, 60 * 60 * 24 * 365);
+    return data?.signedUrl ?? null;
+  }
+
   async function load() {
     setLoading(true);
     const { data, error } = await supabase
@@ -84,9 +98,18 @@ function HomePage() {
       .select("*")
       .order("created_at", { ascending: false });
     if (error) toast.error("Erro ao carregar registros");
-    setRecords((data as FarRecord[]) ?? []);
+    const rows = (data as FarRecord[]) ?? [];
+    const resolved = await Promise.all(
+      rows.map(async (r) => ({
+        ...r,
+        before_image_url: await resolveUrl(r.before_image_url),
+        after_image_url: await resolveUrl(r.after_image_url),
+      })),
+    );
+    setRecords(resolved);
     setLoading(false);
   }
+
 
   useEffect(() => {
     load();
