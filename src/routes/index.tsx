@@ -505,8 +505,28 @@ function DetailDialog({
     if (!ref.current) return;
     setExporting(true);
     try {
+      // Inline images as data URLs so the canvas isn't tainted
+      const imgs = Array.from(ref.current.querySelectorAll("img"));
+      await Promise.all(
+        imgs.map(async (el) => {
+          try {
+            const res = await fetch(el.src, { mode: "cors" });
+            const blob = await res.blob();
+            const dataUrl: string = await new Promise((resolve, reject) => {
+              const fr = new FileReader();
+              fr.onload = () => resolve(fr.result as string);
+              fr.onerror = reject;
+              fr.readAsDataURL(blob);
+            });
+            el.src = dataUrl;
+          } catch (err) {
+            console.warn("img inline failed", err);
+          }
+        }),
+      );
       const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: "#fff" });
       const img = canvas.toDataURL("image/jpeg", 0.92);
+
       const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
       const w = pdf.internal.pageSize.getWidth();
       const h = (canvas.height * w) / canvas.width;
