@@ -251,9 +251,9 @@ function NewRecordDialog({ onCreated }: { onCreated: () => void }) {
       .from("far-images")
       .upload(path, file, { contentType: file.type });
     if (error) throw error;
-    const { data } = supabase.storage.from("far-images").getPublicUrl(path);
-    return data.publicUrl;
+    return path;
   }
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
