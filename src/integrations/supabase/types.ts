@@ -25,6 +25,7 @@ export type Database = {
           far_number: string
           id: string
           record_date: string
+          record_datetime: string
           responsible: string
           risk_condition: string
           setor: string
@@ -41,6 +42,7 @@ export type Database = {
           far_number: string
           id?: string
           record_date?: string
+          record_datetime?: string
           responsible: string
           risk_condition: string
           setor: string
@@ -57,6 +59,7 @@ export type Database = {
           far_number?: string
           id?: string
           record_date?: string
+          record_datetime?: string
           responsible?: string
           risk_condition?: string
           setor?: string
