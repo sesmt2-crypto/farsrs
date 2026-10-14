@@ -231,7 +231,6 @@ export function FarrDetail({ record }: { record: FarRecord }) {
           </div>
           <div className="sheet-pair">
             <Cell label="ENCARREGADO" value={record.encarregado} />
-            <Cell label="SUPERVISOR" value={record.supervisor || '—'} />
           </div>
 
           {/* Tabela de Riscos, Ação e Status */}
