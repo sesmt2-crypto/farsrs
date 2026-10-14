@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type { Database } from '@/integrations/supabase/types';
 export type FarRecord = Database['public']['Tables']['far_records']['Row'];
 export const ENCARREGADOS = ['RODÉGIO', 'PAULO CÉSAR', 'ANTONIO', 'ELISEU', 'SILVÉRIO'] as const;
+export const SETORES = ['EXPEDIÇÃO EMBARQUE', 'EXPEDIÇÃO PÁTIO NOVO', 'PRÉ-MONTAGEM', 'MOVIMENTAÇÃO'] as const;
 export const CIPEIROS = ['ALTAIR CESÁR CARNEIRO', 'ELIAS MACHADO', 'PAULO CÉSAR DO SANTOS', 'PAULO HENRIQUE QUINTOPE', 'JOSÉ SILVIO GONÇALVES', 'JOSÉ FERREIRA DOS SANTOS', 'ARLENE NOGUEIRA', 'GABRIELA NOGUEIRA', 'ADINELSON FERREIRA', 'RAIRY RAEQUEL', 'ADRIEL TONETTE', 'LUIS FERNANDES BRANDALIZE', 'RICARDO CARNEIRO'] as const;
 const name = z.string().trim().min(1, 'Preencha os campos obrigatórios.').max(150);
 export const farrSchema = z.object({

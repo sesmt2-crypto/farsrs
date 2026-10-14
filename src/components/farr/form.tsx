@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { CIPEIROS, ENCARREGADOS, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
+import { CIPEIROS, ENCARREGADOS, SETORES, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
 import { updateFarr } from '@/lib/farr/data.functions';
 import { PhotoField } from './photo-field';
 
@@ -222,14 +222,21 @@ export function FarrForm({ record, onSaved }: { record?: FarRecord; onSaved?: (r
           </Field>
 
           <Field label="Setor *">
-            <Input
+            <select
               aria-label="Setor"
-              maxLength={150}
               required
-              placeholder="Digite o setor"
+              className="farr-select"
               value={form.setor}
               onChange={(e) => set('setor', e.target.value)}
-            />
+            >
+              <option value="">Selecione o setor</option>
+              {record && record.setor && !SETORES.some((s) => s === record.setor) && (
+                <option value={record.setor}>{record.setor}</option>
+              )}
+              {SETORES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
           </Field>
 
           <Field label="Encarregado *">
