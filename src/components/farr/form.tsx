@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { CIPEIROS, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
+import { CIPEIROS, ENCARREGADOS, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
 import { updateFarr } from '@/lib/farr/data.functions';
 import { PhotoField } from './photo-field';
 
@@ -37,7 +37,6 @@ export function FarrForm({ record, onSaved }: { record?: FarRecord; onSaved?: (r
     cipeiro: record?.cipeiro ?? '',
     setor: record?.setor ?? '',
     encarregado: record?.encarregado ?? '',
-    supervisor: record?.supervisor ?? '',
     risk_condition: record?.risk_condition ?? '',
     corrective_action: record?.corrective_action ?? '',
     responsible: record?.responsible ?? '',
@@ -234,24 +233,21 @@ export function FarrForm({ record, onSaved }: { record?: FarRecord; onSaved?: (r
           </Field>
 
           <Field label="Encarregado *">
-            <Input
+            <select
               aria-label="Encarregado"
-              maxLength={150}
               required
-              placeholder="Digite o encarregado"
+              className="farr-select"
               value={form.encarregado}
               onChange={(e) => set('encarregado', e.target.value)}
-            />
-          </Field>
-
-          <Field label="Supervisor">
-            <Input
-              aria-label="Supervisor"
-              maxLength={150}
-              placeholder="Digite o supervisor"
-              value={form.supervisor}
-              onChange={(e) => set('supervisor', e.target.value)}
-            />
+            >
+              <option value="">Selecione o encarregado</option>
+              {record && record.encarregado && !ENCARREGADOS.some((n) => n === record.encarregado) && (
+                <option value={record.encarregado}>{record.encarregado}</option>
+              )}
+              {ENCARREGADOS.map((n) => (
+                <option key={n} value={n}>{n}</option>
+              ))}
+            </select>
           </Field>
 
           <Field label="Responsável pela Ação *">

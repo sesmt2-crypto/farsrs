@@ -52,7 +52,7 @@ export function FarrHeader() {
           </Button>
 
           <Button variant={user ? "secondary" : "outline"} size="sm" asChild>
-            <Link to={user ? '/admin' : '/auth'} activeProps={{ className: 'ring-1 ring-primary' }}>
+            <Link to="/admin" activeProps={{ className: 'ring-1 ring-primary' }}>
               <ShieldCheck className="h-4 w-4 text-primary" />
               <span>{user ? 'Painel Admin' : 'Admin'}</span>
             </Link>

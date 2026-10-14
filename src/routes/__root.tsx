@@ -1,3 +1,4 @@
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -37,7 +38,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -51,7 +52,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           Ocorreu um erro ao carregar a página
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {error.message || "Tente atualizar a página ou retornar ao início."}
+          {(error as Error)?.message || "Tente atualizar a página ou retornar ao início."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button

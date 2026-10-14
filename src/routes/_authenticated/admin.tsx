@@ -1,5 +1,0 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { adminAccess } from '@/lib/farr/data.functions';
-import { farrQuery } from '@/lib/farr/queries';
-import { Records } from '@/components/farr/records';
-export const Route=createFileRoute('/_authenticated/admin')({head:()=>({meta:[{title:'Administração de FARRs | SRS'},{name:'description',content:'Área restrita de gestão, edição e atualização de FARRs da SRS.'},{property:'og:title',content:'Administração de FARRs — SRS'},{property:'og:description',content:'Gestão administrativa de apontamentos e resoluções de riscos.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary'},{name:'robots',content:'noindex'}]}),loader:async({context})=>{await adminAccess();await context.queryClient.ensureQueryData(farrQuery());},errorComponent:()=> <main className="mx-auto max-w-3xl px-4 py-12"><h2 className="text-xl font-bold">Acesso restrito</h2><p className="mt-3 text-muted-foreground">Esta conta não possui permissão de administrador ou o serviço está indisponível.</p></main>,component:()=> <main className="mx-auto max-w-6xl px-4 py-8"><Records admin/></main>});
