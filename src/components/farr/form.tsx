@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { CIPEIROS, ENCARREGADOS, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
+import { CIPEIROS, ENCARREGADOS, SETORES, farrSchema, photoSchema, localDatetime, type FarRecord } from '@/lib/farr/schema';
 import { updateFarr } from '@/lib/farr/data.functions';
 import { PhotoField } from './photo-field';
 
