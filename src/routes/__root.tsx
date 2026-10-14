@@ -52,7 +52,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
           Ocorreu um erro ao carregar a página
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {error.message || "Tente atualizar a página ou retornar ao início."}
+          {(error as Error)?.message || "Tente atualizar a página ou retornar ao início."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
